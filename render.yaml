@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: worldcup-kb
+    env: static
+    plan: free
+    branch: main
+    staticPublishPath: docs
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
