@@ -1,50 +1,50 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>WorldCup KB</title>
-  <style>
-    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f172a;color:#e5e7eb;line-height:1.6}
-    main{max-width:980px;margin:0 auto;padding:56px 24px}
-    h1{font-size:44px;margin:0 0 12px;letter-spacing:-.04em}
-    h2{margin:0 0 10px;color:#93c5fd}
-    .lead{font-size:20px;color:#cbd5e1}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:28px}
-    .card{background:#111827;border:1px solid #334155;border-radius:20px;padding:24px}
-    .badge{display:inline-block;border:1px solid #475569;border-radius:999px;padding:6px 10px;margin:4px;color:#bfdbfe}
-    code{background:#020617;border:1px solid #1e293b;padding:2px 6px;border-radius:6px}
-    footer{margin-top:32px;color:#94a3b8;font-size:14px}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WorldCup KB</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#07111f;color:#e5e7eb;line-height:1.6}main{max-width:1180px;margin:0 auto;padding:34px 18px}h1{font-size:38px;margin:0 0 8px}.lead{font-size:18px;color:#cbd5e1;margin:0 0 24px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.card{background:#0f172a;border:1px solid #334155;border-radius:18px;padding:18px}.team{display:inline-block;margin:4px;padding:6px 9px;border-radius:999px;background:#111827;border:1px solid #334155;color:#bfdbfe}.match{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #263244;padding:10px 0}.status{color:#93c5fd;white-space:nowrap}.section{margin-top:28px}.formula{font-family:ui-monospace,Menlo,monospace;background:#020617;border:1px solid #1e293b;border-radius:12px;padding:14px;overflow:auto}.pill{display:inline-block;border:1px solid #475569;border-radius:999px;padding:5px 9px;margin:3px;color:#dbeafe}input,button{font:inherit;border-radius:10px;border:1px solid #334155;padding:10px;background:#020617;color:#e5e7eb}button{cursor:pointer;background:#1d4ed8;border-color:#2563eb}footer{margin-top:28px;color:#94a3b8;font-size:13px}
+</style>
 </head>
 <body>
 <main>
-  <h1>WorldCup Knowledge Base</h1>
-  <p class="lead">国家队世界杯历史数据库与胜率推演系统。</p>
+<h1>WorldCup Knowledge Base</h1>
+<p class="lead">世界杯 2026 小组、赛程、球队档案骨架与胜率推演页面。</p>
 
-  <section class="grid">
-    <div class="card">
-      <h2>Data</h2>
-      <span class="badge">World Cup History</span>
-      <span class="badge">Team Profiles</span>
-      <span class="badge">Match Events</span>
-      <span class="badge">Squads</span>
-    </div>
-    <div class="card">
-      <h2>Inference</h2>
-      <span class="badge">Elo Rating</span>
-      <span class="badge">Time Decay</span>
-      <span class="badge">Opponent Strength</span>
-      <span class="badge">Win Probability</span>
-    </div>
-    <div class="card">
-      <h2>Formula</h2>
-      <p><code>E = 1 / (1 + 10 ^ ((Rb - Ra) / 400))</code></p>
-      <p>用球队 rating 差作为基础胜率，再叠加近期表现、阶段权重和历史对阵。</p>
-    </div>
-  </section>
+<section class="card">
+<h2>胜率推演器</h2>
+<p>输入两队 rating，按 Elo 公式计算基础胜率。</p>
+<div><input id="ra" value="1600"><input id="rb" value="1500"><button onclick="calc()">计算</button></div>
+<p id="out">Team A 胜率：64.01%</p>
+<div class="formula">E = 1 / (1 + 10 ^ ((Rb - Ra) / 400))</div>
+</section>
 
-  <footer>Deployment target: Render Static Site · Publish directory: docs</footer>
+<section class="section">
+<h2>世界杯 2026 小组</h2>
+<div class="grid" id="groups"></div>
+</section>
+
+<section class="section">
+<h2>近期赛程与结果</h2>
+<div class="card" id="matches"></div>
+</section>
+
+<section class="section grid">
+<div class="card"><h2>系统目标</h2><span class="pill">球队历史</span><span class="pill">比赛事件</span><span class="pill">阵容变化</span><span class="pill">Elo 强度</span><span class="pill">时间衰减</span><span class="pill">胜率推演</span></div>
+<div class="card"><h2>数据层级</h2><p>Team → Tournament → Match → Event → Player → Rating Timeline</p></div>
+</section>
+<footer>Render Static Site · GitHub: aa339519589-cpu/worldcup-kb</footer>
 </main>
+<script>
+const groups={
+A:['Mexico','South Africa','South Korea','Czechia'],B:['Canada','Bosnia and Herzegovina','Qatar','Switzerland'],C:['Brazil','Morocco','Haiti','Scotland'],D:['United States','Paraguay','Australia','Turkey'],E:['Germany','Curacao','Ivory Coast','Ecuador'],F:['Netherlands','Japan','Sweden','Tunisia'],G:['Belgium','Egypt','Iran','New Zealand'],H:['Spain','Cape Verde','Saudi Arabia','Uruguay'],I:['France','Senegal','Iraq','Norway'],J:['Argentina','Algeria','Austria','Jordan'],K:['Portugal','DR Congo','Uzbekistan','Colombia'],L:['England','Croatia','Ghana','Panama']};
+const matches=[
+['2026-06-11','Mexico 2-0 South Africa','Complete'],['2026-06-11','South Korea 2-1 Czechia','Complete'],['2026-06-12','Canada 1-1 Bosnia and Herzegovina','Complete'],['2026-06-12','United States 4-1 Paraguay','Complete'],['2026-06-13','Brazil 1-1 Morocco','Complete'],['2026-06-13','Haiti 0-1 Scotland','Complete'],['2026-06-14','Australia 2-0 Turkey','Complete'],['2026-06-14','Germany vs Curacao','Scheduled'],['2026-06-14','Netherlands vs Japan','Scheduled'],['2026-06-15','Spain vs Cape Verde','Scheduled'],['2026-06-15','Belgium vs Egypt','Scheduled'],['2026-06-16','France vs Senegal','Scheduled'],['2026-06-16','Argentina vs Algeria','Scheduled'],['2026-06-17','Portugal vs DR Congo','Scheduled'],['2026-06-17','England vs Croatia','Scheduled']];
+function render(){document.getElementById('groups').innerHTML=Object.entries(groups).map(([g,ts])=>`<div class="card"><h3>Group ${g}</h3>${ts.map(t=>`<span class="team">${t}</span>`).join('')}</div>`).join('');document.getElementById('matches').innerHTML=matches.map(m=>`<div class="match"><span>${m[0]} · ${m[1]}</span><span class="status">${m[2]}</span></div>`).join('')}
+function calc(){let a=+document.getElementById('ra').value,b=+document.getElementById('rb').value;let p=1/(1+Math.pow(10,(b-a)/400));document.getElementById('out').textContent='Team A 胜率：'+(p*100).toFixed(2)+'%'}
+render();calc();
+</script>
 </body>
 </html>
